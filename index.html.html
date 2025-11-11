@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Favourite Movie - Dynamic Page</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome (for icons, e.g., in Contact form) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Internal CSS (Styling from previous version, adapted for better design) -->
+    <style>
+        body {
+            /* Hawaiian soft blue + ocean gradient wallpaper */
+            background: linear-gradient(135deg, #87CEFA, #B0E0E6, #E0FFFF);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+        }
+
+        .movie-card {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+        }
+
+        .movie-poster {
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+            /* Ensure the poster image fills the space but maintains aspect ratio */
+            object-fit: cover; 
+            height: 450px; /* Fixed height for consistency in the grid */
+            width: 100%;
+        }
+
+        .synopsis {
+            font-style: italic;
+            color: #555;
+        }
+
+        footer {
+            margin-top: 30px;
+            padding: 15px;
+            background: #4682B4; /* ocean blue */
+            color: white;
+            text-align: center;
+            border-radius: 8px;
+        }
+        
+        .carousel-item img {
+            max-height: 500px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 1. Navbar (Responsive) -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="#">🎥 Movie App</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#movie-list">Movies</a>
+                </li>
+                <li class="nav-item">
+                    <!-- Trigger Contact Us Modal -->
+                    <button type="button" class="btn btn-outline-light btn-sm mt-1" data-bs-toggle="modal" data-bs-target="#contactModal">
+                        Contact Us
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Bootstrap Container -->
+<div class="container mt-5">
+    
+    <h2 class="text-center text-dark mb-4">Discover Your Next Favourite Movie</h2>
+
+    <!-- 1. Carousel (Section is retained from previous file) -->
+    <div id="movieGallery" class="carousel slide mb-5 shadow-lg" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <!-- Carousel items will be statically defined for display but can be made dynamic if needed -->
+            <!-- UPDATED: Lilo & Stitch Scene -->
+            <div class="carousel-item active">
+                <img src="images/lioo.jpg">
+                <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded-lg p-2">
+                    <h5>Lilo & Stitch</h5>
+                    <p>Experience the magic of 'Ohana.</p>
+                </div>
+            </div>
+            <!-- UPDATED: Action Movie Highlight (Using a dramatic image) -->
+            <div class="carousel-item">
+                <img src="images/action.jpg">
+                <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded-lg p-2">
+                    <h5>Action Highlight</h5>
+                    <p>Adrenaline-pumping excitement.</p>
+                </div>
+            </div>
+            <!-- UPDATED: Comedy Night (Using a bright, funny image) -->
+            <div class="carousel-item">
+                <img src="images/comedy.jpg">
+                <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded-lg p-2">
+                    <h5>Comedy Night</h5>
+                    <p>Laughter guaranteed!</p>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#movieGallery" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#movieGallery" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    <!-- 2. Dynamic Movie List Generation -->
+    <h2 class="text-center text-dark mb-4" id="movie-list">Featured Movies</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4" id="dynamic-movie-container">
+        <!-- Movie cards will be inserted here by JavaScript -->
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        © 2025 Movie Web App | Dynamic Content Showcase
+    </footer>
+</div>
+
+<!-- 3. Modal-based "Contact Us" Form -->
+<div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="contactModalLabel"><i class="fas fa-envelope me-2"></i> Contact Us</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="contactForm">
+                    <!-- Name Field -->
+                    <div class="mb-3">
+                        <label for="contactName" class="form-label">Name:</label>
+                        <input type="text" class="form-control" id="contactName" placeholder="Your Name">
+                        <div class="invalid-feedback" id="nameError"></div>
+                    </div>
+                    <!-- Email Field -->
+                    <div class="mb-3">
+                        <label for="contactEmail" class="form-label">Email:</label>
+                        <input type="email" class="form-control" id="contactEmail" placeholder="name@example.com">
+                        <div class="invalid-feedback" id="emailError"></div>
+                    </div>
+                    <!-- Message Field -->
+                    <div class="mb-3">
+                        <label for="contactMessage" class="form-label">Message:</label>
+                        <textarea class="form-control" id="contactMessage" rows="3" placeholder="Your message"></textarea>
+                        <div class="invalid-feedback" id="messageError"></div>
+                    </div>
+                    
+                    <!-- 4. Ethical Consent Checkbox (Mandatory) -->
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="ethicalConsent">
+                        <label class="form-check-label text-sm" for="ethicalConsent">
+                            I consent to the ethical use of my submitted information and acknowledge the privacy policy.
+                        </label>
+                        <div class="invalid-feedback d-block hidden" id="consentError" style="display:none;">
+                            You must check this box to proceed.
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS (includes Popper for tooltips/popovers) & jQuery for mobile compatibility (optional) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Include jQuery for Popovers/Tooltips/Transitions (if needed for older Bootstrap/mobile features) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Optional: jQuery Mobile is deprecated and heavy. Using Bootstrap 5 transitions instead. -->
+
+<script>
+    // 2. JavaScript Array for Dynamic Movie Data
+    const movies = [
+        {
+            title: "LILO & STITCH (Live Action)",
+            director: "Dean Fleischer Camp",
+            release: "May 23, 2025",
+            synopsis: "Experience this wildly funny and touching live-action reimagining of Disney's beloved animated classic. When a lonely girl named Lilo adopts Stitch, a rambunctious alien puppy, Stitch helps to mend Lilo's broken family -- but not without wreaking hilarious havoc and mischievous fun on the Hawaiian Islands.",
+            cast: ["Maia Kealoha", "Sydney Agudong", "Chris Sanders"],
+            // Anda boleh menukar URL ini kepada imej yang anda mahu
+            poster: "images/lilo&stitch.jpg", 
+            imdbLink: "https://www.imdb.com/title/tt11655566/"
+        },
+        {
+            title: "DUNE: PART TWO",
+            director: "Denis Villeneuve",
+            release: "March 1, 2024",
+            synopsis: "Paul Atreides unites with Chani and the Fremen while seeking revenge against the conspirators who destroyed his family. Facing a choice between the love of his life and the fate of the universe, he endeavors to prevent a terrible future only he can foresee.",
+            cast: ["Timothée Chalamet", "Zendaya", "Rebecca Ferguson"],
+            // Anda boleh menukar URL ini kepada imej yang anda mahu
+            poster: "images/dune.jpg",
+            imdbLink: "https://www.imdb.com/title/tt15239678/"
+        },
+        {
+            title: "INSIDE OUT 2",
+            director: "Kelsey Mann",
+            release: "June 14, 2024",
+            synopsis: "Follows the story of Riley, who is now a teenager. Headquarters is undergoing a sudden demolition to make room for something entirely unexpected: new Emotions! Joy, Sadness, Anger, Fear and Disgust aren't sure how to feel when Anxiety shows up.",
+            cast: ["Amy Poehler", "Maya Hawke", "Kensington Tallman"],
+            // Anda boleh menukar URL ini kepada imej yang anda mahu
+            poster: "images/inside out.webp",
+            imdbLink: "https://www.imdb.com/title/tt22022452/?ref_=ext_shr_lnk"
+        }
+    ];
+
+    const movieContainer = document.getElementById('dynamic-movie-container');
+
+    // Fungsi untuk mendapatkan nombor rawak telah DIHAPUSKAN
+
+    // Function to generate movie cards
+    function generateMovieCards() {
+        movieContainer.innerHTML = ''; // Clear existing content
+
+        movies.forEach((movie, index) => {
+            const castList = movie.cast.join(', ');
+            
+            // Menggunakan properti 'poster' secara langsung, tanpa menjana nombor rawak
+            const posterUrl = movie.poster; 
+            
+            const cardHtml = `
+                <div class="col">
+                    <div class="card h-100 movie-card border-0">
+                        <img src="${posterUrl}" class="card-img-top movie-poster" alt="${movie.title} Poster" onerror="this.onerror=null; this.src='https://placehold.co/300x450/808080/ffffff?text=Image+Not+Found'">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary fw-bold">${movie.title}</h5>
+                            <p class="card-text mb-2 text-muted">Directed by: ${movie.director}</p>
+                            
+                            <!-- 5. Tooltip for Release Date -->
+                            <p class="card-text">
+                                Release Date: 
+                                <span class="badge bg-secondary" 
+                                      data-bs-toggle="tooltip" 
+                                      data-bs-placement="top" 
+                                      data-bs-title="Date the movie officially hit theaters">
+                                    ${movie.release}
+                                </span>
+                            </p>
+                            
+                            <!-- 5. Popover for Cast -->
+                            <p class="card-text synopsis">${movie.synopsis.substring(0, 100)}...</p>
+                            <button type="button" class="btn btn-sm btn-outline-info" 
+                                    data-bs-toggle="popover" 
+                                    data-bs-placement="bottom" 
+                                    data-bs-custom-class="custom-popover"
+                                    data-bs-title="Main Cast"
+                                    data-bs-content="${castList}">
+                                Show Cast
+                            </button>
+                            
+                        </div>
+                        <div class="card-footer bg-white border-0 pt-0">
+                            <a href="${movie.imdbLink}" target="_blank" class="btn btn-danger btn-sm w-100">View on IMDb</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+            movieContainer.innerHTML += cardHtml;
+        });
+    }
+    
+    // --- 3. & 4. Contact Form Validation ---
+    const contactForm = document.getElementById('contactForm');
+    const consentCheckbox = document.getElementById('ethicalConsent');
+    const consentError = document.getElementById('consentError');
+
+    function validateContactForm(event) {
+        event.preventDefault(); // Stop default submission
+        let isValid = true;
+
+        // Helper function for field validation
+        function validateField(fieldId, errorId, message) {
+            const field = document.getElementById(fieldId);
+            const error = document.getElementById(errorId);
+            if (field.value.trim() === '') {
+                field.classList.add('is-invalid');
+                error.textContent = message;
+                isValid = false;
+            } else {
+                field.classList.remove('is-invalid');
+                field.classList.add('is-valid');
+            }
+        }
+        
+        // Custom Email Validation
+        function validateEmail() {
+            const field = document.getElementById('contactEmail');
+            const error = document.getElementById('emailError');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (field.value.trim() === '') {
+                field.classList.add('is-invalid');
+                error.textContent = 'Email is required.';
+                isValid = false;
+            } else if (!emailRegex.test(field.value.trim())) {
+                field.classList.add('is-invalid');
+                error.textContent = 'Please enter a valid email address.';
+                isValid = false;
+            } else {
+                field.classList.remove('is-invalid');
+                field.classList.add('is-valid');
+            }
+        }
+
+        // Run all validations
+        validateField('contactName', 'nameError', 'Name is required.');
+        validateEmail();
+        validateField('contactMessage', 'messageError', 'Message is required.');
+        
+        // 4. Mandatory Ethical Consent Checkbox Validation
+        if (!consentCheckbox.checked) {
+            consentCheckbox.classList.add('is-invalid');
+            consentError.style.display = 'block';
+            isValid = false;
+        } else {
+            consentCheckbox.classList.remove('is-invalid');
+            consentError.style.display = 'none';
+        }
+
+        if (isValid) {
+            // Success: Form is valid and consent is given.
+            // NOTE: We use a custom modal or message box instead of alert()
+            const successMessage = 'Message Sent Successfully (Form Validated)!';
+            console.log(successMessage); // Log success
+            
+            // For a better user experience, we'll just log and reset the form/validation styles.
+            // Since we cannot use alert(), this confirms success in the console.
+            
+            contactForm.reset();
+            
+            // Reset validation states after submission
+            document.querySelectorAll('.is-valid, .is-invalid').forEach(el => {
+                el.classList.remove('is-valid', 'is-invalid');
+            });
+
+            // Close modal after successful submission
+            const contactModal = bootstrap.Modal.getInstance(document.getElementById('contactModal'));
+            if (contactModal) contactModal.hide();
+        }
+    }
+
+    // --- Initialization ---
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Generate movie cards on load
+        generateMovieCards();
+        
+        // Enable Tooltips and Popovers (Bootstrap 5 requirement)
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+
+        const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
+        [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
+
+        // Attach validation function to the form submission
+        contactForm.addEventListener('submit', validateContactForm);
+    });
+
+</script>
+
+</body>
+</html>
